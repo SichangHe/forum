@@ -5,7 +5,8 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all.joins(:user).select { |post| post.visible_to? current_user }
+    @q = Post.ransack(params[:q])
+    @posts = @q.result(distinct: true).joins(:user).select { |post| post.visible_to? current_user }
   end
 
   # GET /posts/1 or /posts/1.json
